@@ -1,35 +1,18 @@
 import Image from 'next/image'
 import { FC } from 'react'
 import { BsCart, BsTrash, BsX } from 'react-icons/bs'
+import { useActions } from '../../../../hooks/useActions'
 import { useOutside } from '../../../../hooks/useOutside'
+import { useTypedSelector } from '../../../../hooks/useTypedSelector'
+import { IProduct } from '../../../../store/products/product.types'
 import PlaceOrder from './PlaceOrder'
-
-const cart: any = [
-	{
-		id: 1,
-		title: 'Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops',
-		price: 109.95,
-		description:
-			'Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday',
-		category: "men's clothing",
-		image: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
-		rating: { rate: 3.9, count: 120 },
-	},
-	{
-		id: 2,
-		title: 'Mens Casual Premium Slim Fit T-Shirts ',
-		price: 22.3,
-		description:
-			'Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.',
-		category: "men's clothing",
-		image:
-			'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
-		rating: { rate: 4.1, count: 259 },
-	},
-]
 
 const CartDropdown: FC = () => {
 	const { ref, isShow, setIsShow } = useOutside(false)
+
+	const {cart} = useTypedSelector(state => state)
+
+	const {removeItem} = useActions()
 
 	return (
 		<>
@@ -48,7 +31,7 @@ const CartDropdown: FC = () => {
 				>
 					{cart.length ? (
 						<>
-							{cart.map((product: any) => (
+							{cart.map((product: IProduct) => (
 								<div
 									key={`Cart item: ${product.id}`}
 									className='flex items-center justify-between bg-green-100 rounded-lg p-4 mb-4'
@@ -71,7 +54,7 @@ const CartDropdown: FC = () => {
 											<div className='text-green-800'>${product.price}</div>
 										</div>
 									</div>
-									<button>
+									<button onClick={() => removeItem({id: product.id})}>
 										<BsTrash className='text-green-600' />
 									</button>
 								</div>
